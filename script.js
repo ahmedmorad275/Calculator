@@ -2,43 +2,19 @@
 // Selecting Elements
 const clearAll = document.querySelector('.clear-all');
 const clearLast = document.querySelector('.clear-last');
-const percent = document.querySelector('.percent');
-const divide = document.querySelector('.divide');
-const seven = document.querySelector('.seven');
-const eight = document.querySelector('.eight');
-const nine = document.querySelector('.nine');
-const multi = document.querySelector('.multi');
-const four = document.querySelector('.four');
-const five = document.querySelector('.five');
-const six = document.querySelector('.six');
-const abs = document.querySelector('.abs');
-const one = document.querySelector('.one');
-const two = document.querySelector('.two');
-const three = document.querySelector('.three');
-const sum = document.querySelector('.sum');
-const zero = document.querySelector('.zero');
-const dot = document.querySelector('.dot');
 const equal = document.querySelector('.equal');
 const inputs = document.querySelector('.inputs');
 const result = document.querySelector('.result');
 const summary = document.querySelector('.summary');
+const btns = document.querySelectorAll('.btn');
 
-one.addEventListener('click', () => (inputs.innerHTML += 1));
-two.addEventListener('click', () => (inputs.innerHTML += 2));
-three.addEventListener('click', () => (inputs.innerHTML += 3));
-four.addEventListener('click', () => (inputs.innerHTML += 4));
-five.addEventListener('click', () => (inputs.innerHTML += 5));
-six.addEventListener('click', () => (inputs.innerHTML += 6));
-seven.addEventListener('click', () => (inputs.innerHTML += 7));
-eight.addEventListener('click', () => (inputs.innerHTML += 8));
-nine.addEventListener('click', () => (inputs.innerHTML += 9));
-zero.addEventListener('click', () => (inputs.innerHTML += 0));
-dot.addEventListener('click', () => (inputs.innerHTML += '.'));
-sum.addEventListener('click', () => (inputs.innerHTML += ' + '));
-abs.addEventListener('click', () => (inputs.innerHTML += ' - '));
-multi.addEventListener('click', () => (inputs.innerHTML += ' × '));
-divide.addEventListener('click', () => (inputs.innerHTML += ' ÷ '));
-percent.addEventListener('click', () => (inputs.innerHTML += ' % '));
+btns.forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    if (btn.dataset.value) {
+      inputs.innerHTML += btn.dataset.value;
+    }
+  });
+});
 // Remove last
 function backSpace() {
   const inputArr = inputs.innerHTML.trimEnd().split('').slice(0, -1);
@@ -58,49 +34,18 @@ function setUp() {
 }
 // Calculate
 function calc() {
-  if (inputs.innerHTML.includes('+')) {
-    const inputArr = inputs.innerHTML.split(' + ');
-    let res = inputArr
-      .map((el) => Number(el))
-      .reduce((curr, total) => curr + total, 0);
-    result.innerHTML = res;
-    setUp();
-  } else if (inputs.innerHTML.includes('×')) {
-    const inputArr = inputs.innerHTML.split(' × ');
-    let res = inputArr
-      .map((el) => Number(el))
-      .reduce((curr, total) => curr * total, 1);
-    result.innerHTML = res;
-    setUp();
-  } else if (inputs.innerHTML.includes('÷')) {
-    const inputArr = inputs.innerHTML.split(' ÷ ');
-    let res;
-    for (let i = 0; i < inputArr.length; i++) {
-      res = Number(inputArr[0]) / Number(inputArr[1]);
-    }
-    result.innerHTML = res;
-    setUp();
-  } else if (inputs.innerHTML.includes('%')) {
-    const inputArr = inputs.innerHTML.split(' % ');
-    let res;
-    for (let i = 0; i < inputArr.length; i++) {
-      res = Number(inputArr[0]) % Number(inputArr[1]);
-    }
-    result.innerHTML = res;
-    setUp();
-  } else if (inputs.innerHTML.includes('-')) {
-    const inputArr = inputs.innerHTML.split(' - ');
-    let res;
-    for (let i = 0; i < inputArr.length; i++) {
-      res = Number(inputArr[0]) - Number(inputArr[1]);
-    }
-    result.innerHTML = res;
-    setUp();
+  let conver = inputs.innerHTML.replaceAll('×', '*').replaceAll('÷', '/');
+  try {
+    result.innerHTML = eval(conver);
+  } catch (error) {
+    inputs.innerHTML = 'Error';
+    summary.innerHTM = '';
+    result.innerHTML = 0;
   }
+  setUp();
 }
 
 document.querySelector('body').addEventListener('keydown', function (e) {
-  console.log(e.key)
   switch (e.key) {
     case '1':
       inputs.innerHTML += 1;
@@ -133,33 +78,31 @@ document.querySelector('body').addEventListener('keydown', function (e) {
       inputs.innerHTML += 0;
       break;
     case '+':
-      inputs.innerHTML += ' + ';
+      inputs.innerHTML += '+';
       break;
     case '-':
-      inputs.innerHTML += ' - ';
+      inputs.innerHTML += '-';
       break;
     case '*':
-      inputs.innerHTML += ' × ';
+      inputs.innerHTML += '×';
       break;
     case '/':
-      inputs.innerHTML += ' ÷ ';
+      inputs.innerHTML += '÷';
       break;
     case '%':
-      inputs.innerHTML += ' % ';
+      inputs.innerHTML += '%';
       break;
     case 'Backspace':
       backSpace();
       break;
     case 'Delete':
-      clear();
-      break;
     case 'Escape':
       clear();
       break;
     case 'Enter':
       calc();
       break;
-      case '.':
+    case '.':
       inputs.innerHTML += '.';
       break;
   }
