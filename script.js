@@ -36,7 +36,7 @@ function setUp() {
 function calc() {
   let conver = inputs.innerHTML.replaceAll('×', '*').replaceAll('÷', '/');
   try {
-    result.innerHTML = eval(conver);
+    result.innerHTML = math.evaluate(conver);
   } catch (error) {
     inputs.innerHTML = 'Error';
     summary.innerHTM = '';
